@@ -29,7 +29,8 @@ namespace BlazorCRUD.Client.Services.InmuebleServices
         {
             var response = await result.Content.ReadFromJsonAsync<List<Inmueble>>();
             Inmuebles = response;
-            _navigationManager.NavigateTo("Inmuebles");
+            _navigationManager.NavigateTo("/Inmueble");
+
         }
 
         public async Task<Inmueble> GetInmueble(byte id)

@@ -44,12 +44,12 @@ else
 
     @if (Id == null)
     {
-        <button type="submit" class="btn btn-primary">@btnText</button>
+        <button type="submit" class="btn btn-primary">Save New Inmueble</button>
 
 
     } else
     {
-        <button type="submit" class="btn btn-primary">@btnText</button>
+        <button type="submit" class="btn btn-primary">Update Inmueble</button>
         <button type="button" class="btn btn-danger" @onclick="DeleteInmueble">Delete Inmueble</button> 
     }
 </EditForm>
@@ -65,8 +65,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await InmuebleServices.GetTipoInmuebles();
-        btnText = Id == null ? "Save New Inmueble" : "Update Inmueble";
-
     }
 
     protected override async Task OnParametersSetAsync()
@@ -94,11 +92,10 @@ else
     {
         if (Id == null)
         {
-            inmueble.IdInmueble = 0;
+            inmueble.IdTipoInmueble = inmuebleAux.IdTipoInmueble;
             inmueble.DescInmueble = inmuebleAux.DescInmueble;
             inmueble.UbicInmueble = inmuebleAux.UbicInmueble;
             inmueble.CostoInmueble = Convert.ToDecimal(inmuebleAux.CostoInmueble);
-            inmueble.IdTipoInmueble = inmuebleAux.IdTipoInmueble;
 
             await InmuebleServices.PostInmueble(inmueble);
         }
