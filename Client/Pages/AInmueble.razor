@@ -1,6 +1,7 @@
 ﻿@page "/Inmueble";
 @page "/Inmueble/{id:int}"
 @using BlazorCRUD.Server.Models;
+@inject NavigationManager NavigationManager
 @inject IInmuebleServices InmuebleServices
 
 
@@ -44,7 +45,7 @@ else
 
     @if (Id == null)
     {
-        <button type="submit" class="btn btn-primary">Save New Inmueble</button>
+        <button type="submit" class="btn btn-primary" >Save New Inmueble</button>
 
 
     } else
@@ -88,6 +89,7 @@ else
     }
 
 
+
     async Task HandleSubmit()
     {
         if (Id == null)
@@ -98,6 +100,8 @@ else
             inmueble.CostoInmueble = Convert.ToDecimal(inmuebleAux.CostoInmueble);
 
             await InmuebleServices.PostInmueble(inmueble);
+
+
         }
         else
         {
@@ -107,8 +111,10 @@ else
             inmueble.CostoInmueble =  Convert.ToDecimal(inmuebleAux.CostoInmueble);
             inmueble.IdTipoInmueble = inmuebleAux.IdTipoInmueble;
 
-            await InmuebleServices.PutInmueble(inmueble.IdTipoInmueble, inmueble);
+            await InmuebleServices.PutInmueble(inmueble.IdInmueble, inmueble);
         }
+
+        NavigationManager.NavigateTo("/Inmuebles");
     }
 
     public partial class InmuebleAux
@@ -128,6 +134,9 @@ else
     async Task DeleteInmueble()
     {
         await InmuebleServices.DeleteInmueble(inmueble.IdInmueble);
+
+        NavigationManager.NavigateTo("/Inmuebles");
+
     }
     
 }

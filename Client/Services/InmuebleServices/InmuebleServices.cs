@@ -22,16 +22,9 @@ namespace BlazorCRUD.Client.Services.InmuebleServices
         public async Task DeleteInmueble(byte id)
         {
             var result = await _http.DeleteAsync($"api/Inmuebles/{id}");
-            await SetInmuebles(result);
         }
 
-        private async Task SetInmuebles(HttpResponseMessage result)
-        {
-            var response = await result.Content.ReadFromJsonAsync<List<Inmueble>>();
-            Inmuebles = response;
-            _navigationManager.NavigateTo("/Inmueble");
 
-        }
 
         public async Task<Inmueble> GetInmueble(byte id)
         {
@@ -64,13 +57,12 @@ namespace BlazorCRUD.Client.Services.InmuebleServices
         public async Task PostInmueble(Inmueble inmueble)
         {
             var result = await _http.PostAsJsonAsync("api/Inmuebles", inmueble);
-            await SetInmuebles(result);
+
         }
 
         public async Task PutInmueble(byte Id, Inmueble inmueble)
         {
-            var result = await _http.PostAsJsonAsync($"api/Inmuebles/{inmueble.IdInmueble}", inmueble);
-            await SetInmuebles(result);
+            var result = await _http.PutAsJsonAsync($"api/Inmuebles/{Id}", inmueble);
         }
     }
 }
