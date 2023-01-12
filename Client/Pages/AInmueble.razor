@@ -1,0 +1,136 @@
+﻿@page "/Inmueble";
+@page "/Inmueble/{id:int}"
+@using BlazorCRUD.Server.Models;
+@inject IInmuebleServices InmuebleServices
+
+
+<h3>Inmueble</h3>
+
+
+@if (Id == null)
+{
+        <PageTitle>Create a new Inmueble</PageTitle>
+        <h3>Create a new Inmueble</h3>
+}
+else
+{
+    <PageTitle>Edit @inmuebleAux.IdInmueble </PageTitle>
+    <h3>Edit @inmuebleAux.IdInmueble</h3>
+}
+
+<EditForm Model="inmuebleAux" OnSubmit="HandleSubmit">
+    <div>
+        <label for="desc_inmueble">Descripcion del Inmueble</label>
+        <InputText id="desc_inmueble" @bind-Value="inmuebleAux.DescInmueble" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="ubic_inmueble">Ubicacion del Inmueble</label>
+        <InputText id="ubic_inmueble" @bind-Value="inmuebleAux.UbicInmueble" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="costo_inmueble">Costo del Inmueble</label>
+        <InputText id="costo_inmueble" @bind-Value="inmuebleAux.CostoInmueble" class="form-control"></InputText>
+    </div>
+    <div>
+        <label>Tipo Inmueble</label><br />
+        <InputSelect @bind-Value="inmuebleAux.IdTipoInmueble" class="form-select" >
+            @foreach (var TipoInmuebles in InmuebleServices.TipoInmuebles)
+            {
+                    <option value="@TipoInmuebles.IdTipoInmueble">@TipoInmuebles.DescInmueble</option>
+            }
+        </InputSelect>
+    </div>
+    <br />
+
+    @if (Id == null)
+    {
+        <button type="submit" class="btn btn-primary">@btnText</button>
+
+
+    } else
+    {
+        <button type="submit" class="btn btn-primary">@btnText</button>
+        <button type="button" class="btn btn-danger" @onclick="DeleteInmueble">Delete Hero</button> 
+    }
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    string btnText = string.Empty;
+
+    Inmueble inmueble = new Inmueble { };
+    InmuebleAux inmuebleAux = new InmuebleAux { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InmuebleServices.GetTipoInmuebles();
+        btnText = Id == null ? "Save New Hero" : "Update Hero";
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+        {
+        }
+        else
+        {
+
+            inmueble = await InmuebleServices.GetInmueble((byte)Id);
+
+
+            inmuebleAux.IdInmueble = inmueble.IdInmueble;
+            inmuebleAux.DescInmueble = inmueble.DescInmueble;
+            inmuebleAux.UbicInmueble = inmueble.UbicInmueble;
+            inmuebleAux.CostoInmueble = inmueble.CostoInmueble.ToString();
+            inmuebleAux.IdTipoInmueble = inmueble.IdTipoInmueble;
+
+        }
+    }
+
+
+    async Task HandleSubmit()
+    {
+        if (Id == null)
+        {
+            inmueble.IdInmueble = 0;
+            inmueble.DescInmueble = inmuebleAux.DescInmueble;
+            inmueble.UbicInmueble = inmuebleAux.UbicInmueble;
+            inmueble.CostoInmueble = Convert.ToDecimal(inmuebleAux.CostoInmueble);
+            inmueble.IdTipoInmueble = inmuebleAux.IdTipoInmueble;
+
+            await InmuebleServices.PostInmueble(inmueble);
+        }
+        else
+        {
+            inmueble.IdInmueble = inmuebleAux.IdInmueble;
+            inmueble.DescInmueble = inmuebleAux.DescInmueble;
+            inmueble.UbicInmueble = inmuebleAux.UbicInmueble;
+            inmueble.CostoInmueble =  Convert.ToDecimal(inmuebleAux.CostoInmueble);
+            inmueble.IdTipoInmueble = inmuebleAux.IdTipoInmueble;
+
+            await InmuebleServices.PutInmueble(inmueble.IdTipoInmueble, inmueble);
+        }
+    }
+
+    public partial class InmuebleAux
+    {
+        public byte IdInmueble { get; set; }
+
+        public byte IdTipoInmueble { get; set; }
+
+        public string DescInmueble { get; set; } = null!;
+
+        public string UbicInmueble { get; set; } = null!;
+
+        public string CostoInmueble { get; set; } = null!;
+
+    }
+
+    async Task DeleteInmueble()
+    {
+        await InmuebleServices.DeleteInmueble(inmueble.IdInmueble);
+    }
+    
+}

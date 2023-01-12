@@ -1,0 +1,55 @@
+﻿@page "/Inmuebles"
+@using BlazorCRUD.Shared
+@inject HttpClient Http
+@inject IInmuebleServices InmuebleServices
+@inject NavigationManager NavigationManager
+
+<PageTitle>Inmuebles</PageTitle>
+
+<h3>Imuebles</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>id_tipo_inmueble</th>
+            <th>desc_inmueble</th>
+            <th>ubic_inmueble</th>
+            <th>costo_inmueble</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Inmueble in InmuebleServices.Inmuebles)
+        {
+            <tr>
+                <td>@Inmueble.IdInmueble</td>
+                <td>@Inmueble.IdTipoInmueble</td>
+                <td>@Inmueble.DescInmueble</td>
+                <td>@Inmueble.UbicInmueble</td>
+                <td>@Inmueble.CostoInmueble</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowInmueble(Inmueble.IdInmueble)"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewInmueble">Crete new Inmueble</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await InmuebleServices.GetInmuebles();
+    }
+
+    void ShowInmueble(int id)
+    {
+        NavigationManager.NavigateTo($"Inmueble/{id}");
+    }
+
+    void CreateNewInmueble()
+    {
+        NavigationManager.NavigateTo($"/Inmueble");
+    }
+}
