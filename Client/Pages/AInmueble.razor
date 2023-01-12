@@ -50,7 +50,7 @@ else
     } else
     {
         <button type="submit" class="btn btn-primary">@btnText</button>
-        <button type="button" class="btn btn-danger" @onclick="DeleteInmueble">Delete Hero</button> 
+        <button type="button" class="btn btn-danger" @onclick="DeleteInmueble">Delete Inmueble</button> 
     }
 </EditForm>
 
@@ -65,7 +65,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await InmuebleServices.GetTipoInmuebles();
-        btnText = Id == null ? "Save New Hero" : "Update Hero";
+        btnText = Id == null ? "Save New Inmueble" : "Update Inmueble";
 
     }
 
