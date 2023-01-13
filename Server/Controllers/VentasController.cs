@@ -23,7 +23,7 @@ namespace BlazorCRUD.Server.Controllers
 
         // GET: api/Ventas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Venta>>> GetVenta()
+        public async Task<ActionResult<IEnumerable<Venta>>> GetVentas()
         {
             return await _context.Venta.ToListAsync();
         }

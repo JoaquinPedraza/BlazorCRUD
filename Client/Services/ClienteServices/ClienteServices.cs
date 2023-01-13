@@ -19,7 +19,6 @@ namespace BlazorCRUD.Client.Services.ClienteServices
         public async Task DeleteCliente(byte id)
         {
             var result = await _http.DeleteAsync($"api/Clientes/{id}");
-
         }
 
         public async Task<Cliente> GetCliente(byte id)
@@ -44,13 +43,11 @@ namespace BlazorCRUD.Client.Services.ClienteServices
         public async Task PostCliente(Cliente cliente)
         {
             var result = await _http.PostAsJsonAsync("api/Clientes", cliente);
-
         }
 
         public async Task PutCliente(byte id, Cliente cliente)
         {
             var result = await _http.PutAsJsonAsync($"api/Clientes/{id}", cliente);
-
         }
     }
 }

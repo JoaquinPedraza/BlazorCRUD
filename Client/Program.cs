@@ -3,6 +3,7 @@ global using BlazorCRUD.Client.Services.InmuebleServices;
 global using BlazorCRUD.Client.Services.TipoInmuebleServices;
 global using BlazorCRUD.Client.Services.CondicionServices;
 global using BlazorCRUD.Client.Services.FormaPagoServices;
+global using BlazorCRUD.Client.Services.VentaServices;
 global using BlazorCRUD.Shared;
 using BlazorCRUD.Client;
 using Microsoft.AspNetCore.Components.Web;
@@ -18,5 +19,6 @@ builder.Services.AddScoped<IInmuebleServices, InmuebleServices>();
 builder.Services.AddScoped<ITipoInmuebleServices, TipoInmuebleServices>();
 builder.Services.AddScoped<ICondicionServices, CondicionServices>();
 builder.Services.AddScoped<IFormaPagoServices, FormaPagoServices>();
+builder.Services.AddScoped<IVentaServices, VentaServices>();
 
 await builder.Build().RunAsync();

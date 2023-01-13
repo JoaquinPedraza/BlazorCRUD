@@ -1,0 +1,191 @@
+﻿@page "/Venta";
+@page "/Venta/{id:int}"
+@using BlazorCRUD.Server.Models;
+@inject IVentaServices VentaServices
+
+<h3>UnaVenta</h3>
+
+@if (Id == null)
+{
+    <PageTitle>Create a new Venta</PageTitle>
+    <h3>Create a new Venta</h3>
+}
+else
+{
+    <PageTitle>Edit @venta.IdVenta </PageTitle>
+    <h3>Edit @venta.IdVenta</h3>
+}
+
+<EditForm Model="ventaAux" OnSubmit="HandleSubmit">
+
+    <div>
+        <label>ID Inmueble Venta</label><br />
+        <InputSelect @bind-Value="ventaAux.IdInmueble" class="form-select">
+            @foreach (var inmueble in VentaServices.Inmuebles)
+            {
+                <option value="@inmueble.IdInmueble">@inmueble.DescInmueble</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label>ID Cliente Venta</label><br />
+        <InputSelect @bind-Value="ventaAux.IdCliente" class="form-select">
+            @foreach (var cliente in VentaServices.Clientes)
+            {
+                <option value="@cliente.IdCliente">@cliente.NombreCliente</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label>ID FormaPago Venta</label><br />
+        <InputSelect @bind-Value="ventaAux.IdFormaPago" class="form-select">
+            @foreach (var formaPago in VentaServices.FormasPago)
+            {
+                <option value="@formaPago.IdFormaPago">@formaPago.DescFormaPago</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label>ID Condicion Venta</label><br />
+        <InputSelect @bind-Value="ventaAux.IdCondicion" class="form-select">
+            @foreach (var condicion in VentaServices.Condiciones)
+            {
+                <option value="@condicion.IdCondicion">@condicion.DescCondicion</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label for="desc_venta">Descripcion de la Venta</label>
+        <InputText id="desc_venta" @bind-Value="ventaAux.DescVenta" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="total_venta">Total de la Venta</label>
+        <InputText id="total_venta" @bind-Value="ventaAux.TotalVenta" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="total_iva">Total del IVA</label>
+        <InputText id="total_iva" @bind-Value="ventaAux.TotalIva" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="total_general">Total General</label>
+        <InputText id="total_general" @bind-Value="ventaAux.TotalGeneral" class="form-control"></InputText>
+    </div>
+    <div>
+        <label>Fecha Venta</label><br />
+        <InputDate @bind-Value="ventaAux.FechaVenta" class="form-control"></InputDate>
+    </div>
+    <br />
+
+    @if (Id == null)
+    {
+            <button type="submit" class="btn btn-primary">Save New Cliente</button>
+    }
+    else
+    {
+            <button type="submit" class="btn btn-primary">Update Cliente</button>
+            <button type="button" class="btn btn-danger" @onclick="DeleteClient">Delete Client</button>
+    }
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    Venta venta = new Venta();
+    VentaAux ventaAux = new VentaAux();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VentaServices.GetInmuebles();
+        await VentaServices.GetClientes();
+        await VentaServices.GetFormasPago();
+        await VentaServices.GetCondiciones();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+        {
+        }
+        else
+        {
+            venta = await VentaServices.GetVenta((byte)Id);
+
+            ventaAux.IdVenta = venta.IdVenta;
+            ventaAux.IdCliente = venta.IdCliente;
+            ventaAux.IdInmueble = venta.IdInmueble;
+            ventaAux.IdFormaPago = venta.IdFormaPago;
+            ventaAux.IdCondicion = venta.IdCondicion;
+            ventaAux.DescVenta = venta.DescVenta;
+            ventaAux.TotalVenta = venta.TotalVenta.ToString();
+            ventaAux.TotalIva = venta.TotalIva.ToString();
+            ventaAux.TotalGeneral = venta.TotalGeneral.ToString();
+            ventaAux.FechaVenta = venta.FechaVenta;
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if (Id == null)
+        {
+            venta.IdVenta = ventaAux.IdVenta;
+            venta.IdCliente = ventaAux.IdCliente;
+            venta.IdInmueble = ventaAux.IdInmueble;
+            venta.IdFormaPago = ventaAux.IdFormaPago;
+            venta.IdCondicion = ventaAux.IdCondicion;
+            venta.DescVenta = ventaAux.DescVenta;
+            venta.TotalVenta = Convert.ToDecimal(ventaAux.TotalVenta);
+            venta.TotalIva =  Convert.ToDecimal(ventaAux.TotalIva);
+            venta.TotalGeneral =  Convert.ToDecimal(ventaAux.TotalGeneral);
+            venta.FechaVenta = ventaAux.FechaVenta;
+
+            await VentaServices.PostVenta(venta);
+        }
+        else
+        {
+            venta.IdVenta = ventaAux.IdVenta;
+            venta.IdCliente = ventaAux.IdCliente;
+            venta.IdInmueble = ventaAux.IdInmueble;
+            venta.IdFormaPago = ventaAux.IdFormaPago;
+            venta.IdCondicion = ventaAux.IdCondicion;
+            venta.DescVenta = ventaAux.DescVenta;
+            venta.TotalVenta = Convert.ToDecimal(ventaAux.TotalVenta);
+            venta.TotalIva = Convert.ToDecimal(ventaAux.TotalIva);
+            venta.TotalGeneral = Convert.ToDecimal(ventaAux.TotalGeneral);
+            venta.FechaVenta = ventaAux.FechaVenta;
+
+            await VentaServices.PutVenta(venta.IdVenta, venta);
+        }
+    }
+
+    async Task DeleteClient()
+    {
+        await VentaServices.DeleteVenta(venta.IdVenta);
+    }
+
+    private class VentaAux
+    {
+        public byte IdVenta { get; set; }
+
+        public byte IdInmueble { get; set; }
+
+        public byte IdCliente { get; set; }
+
+        public byte IdCondicion { get; set; }
+
+        public byte IdFormaPago { get; set; }
+
+        public string DescVenta { get; set; } = null!;
+
+        public string TotalVenta { get; set; } = null!;
+
+        public string TotalIva { get; set; } = null!;
+
+        public string TotalGeneral { get; set; } = null!;
+
+        public DateTime FechaVenta { get; set; }
+
+    }
+}

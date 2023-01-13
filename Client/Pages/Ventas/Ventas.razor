@@ -1,0 +1,75 @@
+﻿@page "/Ventas"
+@inject IVentaServices VentaServices
+@inject NavigationManager NavigationManager
+
+<PageTitle>Ventas</PageTitle>
+<h3>Ventas</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id_venta</th>
+            <th>id_inmueble</th>
+            <th>id_cliente</th>
+            <th>id_condicion</th>
+            <th>id_formaPago</th>
+            <th>desc_venta</th>
+            <th>total_venta</th>
+            <th>total_iva</th>
+            <th>total_general</th>
+            <th>fecha_venta</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venta in VentaServices.Ventas)
+        {
+            <tr>
+                <td>@venta.IdVenta</td>
+                <td>@venta.IdInmueble</td>
+                <td>@venta.IdCliente</td>
+                <td>@venta.IdCondicion</td>
+                <td>@venta.IdFormaPago</td>
+                <td>@venta.DescVenta</td>
+                <td>@venta.TotalVenta</td>
+                <td>@venta.TotalIva</td>
+                <td>@venta.TotalGeneral</td>
+                <td>@venta.FechaVenta</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowVenta(venta.IdVenta)"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteVenta(venta.IdVenta)"><i class="oi oi-trash"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewVenta">Crete new Venta</button>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await VentaServices.GetVentas();
+    }
+
+    void ShowVenta(byte Id)
+    {
+        NavigationManager.NavigateTo($"Venta/{Id}");
+    }
+
+
+    async Task DeleteVenta(byte Id)
+    {
+        await VentaServices.DeleteVenta(Id);
+        await VentaServices.GetVentas();
+    }
+
+
+    void CreateNewVenta()
+    {
+        NavigationManager.NavigateTo("/Venta");
+    }
+}
