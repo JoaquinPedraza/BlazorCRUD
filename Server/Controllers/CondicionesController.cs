@@ -23,7 +23,7 @@ namespace BlazorCRUD.Server.Controllers
 
         // GET: api/Condiciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Condicion>>> GetCondicions()
+        public async Task<ActionResult<IEnumerable<Condicion>>> GetCondiciones()
         {
             return await _context.Condicions.ToListAsync();
         }

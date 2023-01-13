@@ -1,6 +1,7 @@
 global using BlazorCRUD.Client.Services.ClienteServices;
 global using BlazorCRUD.Client.Services.InmuebleServices;
 global using BlazorCRUD.Client.Services.TipoInmuebleServices;
+global using BlazorCRUD.Client.Services.CondicionServices;
 global using BlazorCRUD.Shared;
 using BlazorCRUD.Client;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,5 +15,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IClienteServices, ClienteServices>();
 builder.Services.AddScoped<IInmuebleServices, InmuebleServices>();
 builder.Services.AddScoped<ITipoInmuebleServices, TipoInmuebleServices>();
+builder.Services.AddScoped<ICondicionServices, CondicionServices>();
 
 await builder.Build().RunAsync();

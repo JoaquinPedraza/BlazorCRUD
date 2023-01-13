@@ -1,0 +1,60 @@
+﻿@page "/Condiciones"
+@using BlazorCRUD.Shared;
+@inject ICondicionServices CondicionServices
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Condiciones</PageTitle>
+<h3>Condiciones</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Descripcion</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var condicion in CondicionServices.Condiciones)
+        {
+            <tr>
+                <td>@condicion.IdCondicion</td>
+                <td>@condicion.DescCondicion</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowCondicion(condicion.IdCondicion)"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteCondicion(condicion.IdCondicion)"><i class="oi oi-trash"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewCondicion">Crete new Condicion</button>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CondicionServices.GetCondiciones();
+    }
+
+    void ShowCondicion(byte id)
+    {
+        NavigationManager.NavigateTo($"/Condicion/{id}");
+    }
+
+    async Task DeleteCondicion(byte id)
+    {
+        await CondicionServices.DeleteCondicion(id);
+        await CondicionServices.GetCondiciones();
+    }
+
+    void CreateNewCondicion()
+    {
+        NavigationManager.NavigateTo("/Condicion");
+    }
+
+}
