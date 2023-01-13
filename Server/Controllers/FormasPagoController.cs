@@ -23,7 +23,7 @@ namespace BlazorCRUD.Server.Controllers
 
         // GET: api/FormasPago
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FormaPago>>> GetFormaPagos()
+        public async Task<ActionResult<IEnumerable<FormaPago>>> GetFormasPago()
         {
             return await _context.FormaPagos.ToListAsync();
         }

@@ -1,0 +1,59 @@
+﻿@page "/FormasPago"
+@inject IFormaPagoServices FormaPagoServices
+@inject NavigationManager NavigationManager
+
+<PageTitle>Formas de Pago</PageTitle>
+
+<h3>Formas de Pago</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Descripcion</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var formaPago in FormaPagoServices.FormasPago)
+        {
+            <tr>
+                <td>@formaPago.IdFormaPago</td>
+                <td>@formaPago.DescFormaPago</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowFormaPago(formaPago.IdFormaPago)"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteFormaPago(formaPago.IdFormaPago)"><i class="oi oi-trash"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewFormaPago">Crete new Forma Pago</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await FormaPagoServices.GetFormasPago();
+    }
+
+    void ShowFormaPago(byte Id)
+    {
+        NavigationManager.NavigateTo($"FormaPago/{Id}");
+    }
+
+
+    async Task DeleteFormaPago(byte Id)
+    {
+        await FormaPagoServices.DeleteFormaPago(Id);
+        await FormaPagoServices.GetFormasPago();
+    }
+
+
+    void CreateNewFormaPago()
+    {
+        NavigationManager.NavigateTo("/FormaPago");
+    }
+}
