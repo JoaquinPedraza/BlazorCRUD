@@ -23,7 +23,7 @@ namespace BlazorCRUD.Server.Controllers
 
         // GET: api/TiposInmuebles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoInmueble>>> GetTipoInmuebles()
+        public async Task<ActionResult<IEnumerable<TipoInmueble>>> GetTiposInmueble()
         {
             return await _context.TipoInmuebles.ToListAsync();
         }

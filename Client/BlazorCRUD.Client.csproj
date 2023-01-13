@@ -12,7 +12,6 @@
     <None Include="Pages\FetchData.razor" />
     <None Include="Pages\Index.razor" />
     <None Include="Pages\Inmuebles\Inmuebles.razor" />
-    <None Include="Pages\TiposImuebles.razor" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,60 @@
+﻿@page "/TiposInmueble"
+@using BlazorCRUD.Shared;
+@inject ITipoInmuebleServices TipoInmuebleServices
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Tipos de Inmueble</PageTitle>
+<h3>Tipos de Inmueble</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Descripcion</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tipoInmueble in TipoInmuebleServices.TiposInmueble)
+        {
+            <tr>
+                <td>@tipoInmueble.IdTipoInmueble</td>
+                <td>@tipoInmueble.DescInmueble</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowTipoInmueble(tipoInmueble.IdTipoInmueble)"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteTipoInmueble(tipoInmueble.IdTipoInmueble)"><i class="oi oi-trash"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewTipoInmueble">Crete new Tipo de Inmueble</button>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TipoInmuebleServices.GetTiposInmueble();
+    }
+
+    void ShowTipoInmueble(byte id)
+    {
+        NavigationManager.NavigateTo($"/TipoInmueble/{id}");
+    }
+
+    async Task DeleteTipoInmueble(byte id)
+    {
+        await TipoInmuebleServices.DeleteTipoInmueble(id);
+        await TipoInmuebleServices.GetTiposInmueble();
+    }
+
+    void CreateNewTipoInmueble()
+    {
+        NavigationManager.NavigateTo("/TipoInmueble");
+    }
+
+}
