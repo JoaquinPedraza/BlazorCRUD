@@ -17,6 +17,7 @@
             <th>ubic_inmueble</th>
             <th>costo_inmueble</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -31,6 +32,9 @@
                 <td>
                     <button class="btn btn-primary" @onclick="() => ShowInmueble(Inmueble.IdInmueble)"><i class="oi oi-pencil"></i></button>
                 </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteInmueble(Inmueble.IdInmueble)"><i class="oi oi-trash"></i></button>
+                </td>
             </tr>
         }
     </tbody>
@@ -43,10 +47,18 @@
         await InmuebleServices.GetInmuebles();
     }
 
-    void ShowInmueble(int id)
+    void ShowInmueble(byte Id)
     {
-        NavigationManager.NavigateTo($"Inmueble/{id}");
+        NavigationManager.NavigateTo($"Inmueble/{Id}");
     }
+
+
+    async Task DeleteInmueble(byte Id)
+    {
+        await InmuebleServices.DeleteInmueble(Id);
+        await InmuebleServices.GetInmuebles();
+    }
+ 
 
     void CreateNewInmueble()
     {
