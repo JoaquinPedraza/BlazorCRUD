@@ -25,7 +25,13 @@
         {
             <tr>
                 <td>@Inmueble.IdInmueble</td>
-                <td>@Inmueble.IdTipoInmueble</td>
+                @foreach (var TipoInmuebles in InmuebleServices.TipoInmuebles)
+                {
+                    if (Inmueble.IdTipoInmueble == TipoInmuebles.IdTipoInmueble)
+                    {
+                        <td>@TipoInmuebles.DescInmueble</td>
+                    }
+                }
                 <td>@Inmueble.DescInmueble</td>
                 <td>@Inmueble.UbicInmueble</td>
                 <td>@Inmueble.CostoInmueble</td>
@@ -44,6 +50,7 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
+        await InmuebleServices.GetTipoInmuebles();
         await InmuebleServices.GetInmuebles();
     }
 

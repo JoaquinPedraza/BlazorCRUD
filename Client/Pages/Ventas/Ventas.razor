@@ -27,10 +27,34 @@
         {
             <tr>
                 <td>@venta.IdVenta</td>
-                <td>@venta.IdInmueble</td>
-                <td>@venta.IdCliente</td>
-                <td>@venta.IdCondicion</td>
-                <td>@venta.IdFormaPago</td>
+                @foreach (var inmueble in VentaServices.Inmuebles)
+                {
+                    if (inmueble.IdInmueble == venta.IdInmueble)
+                    {
+                        <td>@inmueble.DescInmueble</td>
+                    }
+                }
+                @foreach (var cliente in VentaServices.Clientes)
+                {
+                    if (cliente.IdCliente == venta.IdCliente)
+                    {
+                        <td>@cliente.NombreCliente</td>
+                    }
+                }
+                @foreach (var condicion in VentaServices.Condiciones)
+                {
+                    if (condicion.IdCondicion == venta.IdCondicion)
+                    {
+                        <td>@condicion.DescCondicion</td>
+                    }
+                }
+                @foreach (var formaPago in VentaServices.FormasPago)
+                {
+                    if (formaPago.IdFormaPago == venta.IdFormaPago)
+                    {
+                        <td>@formaPago.DescFormaPago</td>
+                    }
+                }
                 <td>@venta.DescVenta</td>
                 <td>@venta.TotalVenta</td>
                 <td>@venta.TotalIva</td>
@@ -52,6 +76,10 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
+        await VentaServices.GetInmuebles();
+        await VentaServices.GetCondiciones();
+        await VentaServices.GetFormasPago();
+        await VentaServices.GetClientes();
         await VentaServices.GetVentas();
     }
 
