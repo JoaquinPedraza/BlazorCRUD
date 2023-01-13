@@ -1,0 +1,67 @@
+﻿@page "/Clientes"
+@using BlazorCRUD.Shared
+@inject HttpClient Http
+@inject IClienteServices ClientServices
+@inject NavigationManager NavigationManager
+
+<PageTitle>Clientes</PageTitle>
+
+<h1>Clientes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Correo</th>
+            <th>Telefono</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in ClientServices.Clientes)
+        {
+                <tr>
+                <td>@cliente.IdCliente</td>
+                <td>@cliente.NombreCliente</td>
+                <td>@cliente.DirCliente</td>
+                <td>@cliente.CorreoCliente</td>
+                <td>@cliente.TelefonoCliente</td>
+                    <td>
+                    <button class="btn btn-primary" @onclick="() => ShowCliente(cliente.IdCliente)"><i class="oi oi-pencil"></i></button>
+                    </td>
+                    <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteCliente(cliente.IdCliente)"><i class="oi oi-trash"></i></button>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewClient">Crete new Cliente</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ClientServices.GetClientes();
+    }
+
+    void ShowCliente(byte Id)
+    {
+        NavigationManager.NavigateTo($"Cliente/{Id}");
+    }
+
+
+    async Task DeleteCliente(byte Id)
+    {
+        await ClientServices.DeleteCliente(Id);
+        await ClientServices.GetClientes();
+    }
+
+
+    void CreateNewClient()
+    {
+        NavigationManager.NavigateTo("/Cliente");
+    }
+}

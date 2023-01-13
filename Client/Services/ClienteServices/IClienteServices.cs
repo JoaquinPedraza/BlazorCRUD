@@ -5,6 +5,15 @@ namespace BlazorCRUD.Client.Services.ClienteServices
 {
     public interface IClienteServices
     {
-        //List<Cliente> Cliente { get; set }
+        List<Cliente> Clientes { get; set; }
+        Task GetClientes();
+
+        Task<Cliente> GetCliente(byte id);
+
+        Task PostCliente(Cliente cliente);
+
+        Task PutCliente(byte id, Cliente cliente);
+
+        Task DeleteCliente(byte id);
     }
 }

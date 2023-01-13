@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Pages\Clientes.razor" />
+    <None Include="Pages\Clientes\Clientes.razor" />
     <None Include="Pages\Counter.razor" />
     <None Include="Pages\FetchData.razor" />
     <None Include="Pages\Index.razor" />
-    <None Include="Pages\Inmuebles.razor" />
+    <None Include="Pages\Inmuebles\Inmuebles.razor" />
     <None Include="Pages\TiposImuebles.razor" />
   </ItemGroup>
 

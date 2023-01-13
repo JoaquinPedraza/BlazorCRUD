@@ -1,0 +1,136 @@
+﻿@page "/Cliente";
+@page "/Cliente/{id:int}"
+@using BlazorCRUD.Server.Models;
+@inject NavigationManager NavigationManager
+@inject IClienteServices ClienteServices
+
+
+<h3>Cliente</h3>
+
+
+@if (Id == null)
+{
+    <PageTitle>Create a new Cliente</PageTitle>
+    <h3>Create a new Cliente</h3>
+}
+else
+{
+    <PageTitle>Edit @cliente.IdCliente </PageTitle>
+    <h3>Edit @cliente.IdCliente</h3>
+}
+
+<EditForm Model="clienteAux" OnSubmit="HandleSubmit">
+    <div>
+        <label for="nombre_cliente">Nombre del Cliente</label>
+        <InputText id="nombre_cliente" @bind-Value="clienteAux.NombreCliente" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="direc_cliente">Direccion del Cliente</label>
+        <InputText id="direc_cliente" @bind-Value="clienteAux.DirCliente" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="correo_cliente">Correo del Cliente</label>
+        <InputText id="correo_cliente" @bind-Value="clienteAux.CorreoCliente" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="telef_cliente">Telefono del Cliente</label>
+        <InputText id="telef_cliente" @bind-Value="clienteAux.TelefonoCliente" class="form-control"></InputText>
+    </div>
+    <br />
+
+    @if (Id == null)
+    {
+        <button type="submit" class="btn btn-primary">Save New Cliente</button>
+
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Update Cliente</button>
+        <button type="button" class="btn btn-danger" @onclick="DeleteClient">Delete Client</button>
+    }
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    string btnText = string.Empty;
+
+    Cliente cliente = new Cliente { };
+    ClienteAux clienteAux = new ClienteAux { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ClienteServices.GetClientes();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+        {
+        }
+        else
+        {
+
+            cliente = await ClienteServices.GetCliente((byte)Id);
+
+
+            clienteAux.IdCliente = cliente.IdCliente;
+            clienteAux.NombreCliente = cliente.NombreCliente;
+            clienteAux.DirCliente = cliente.DirCliente;
+            clienteAux.CorreoCliente = cliente.CorreoCliente;
+            clienteAux.TelefonoCliente = cliente.TelefonoCliente.ToString();
+
+        }
+    }
+
+
+
+    async Task HandleSubmit()
+    {
+        if (Id == null)
+        {
+            cliente.NombreCliente = clienteAux.NombreCliente;
+            cliente.DirCliente = clienteAux.DirCliente;
+            cliente.CorreoCliente = clienteAux.CorreoCliente;
+            cliente.TelefonoCliente = Convert.ToDecimal(clienteAux.TelefonoCliente);
+
+            await ClienteServices.PostCliente(cliente);
+
+
+        }
+        else
+        {
+            cliente.IdCliente = clienteAux.IdCliente;
+            cliente.NombreCliente = clienteAux.NombreCliente;
+            cliente.DirCliente = clienteAux.DirCliente;
+            cliente.CorreoCliente = clienteAux.CorreoCliente;
+            cliente.TelefonoCliente = Convert.ToDecimal(clienteAux.TelefonoCliente);
+
+            await ClienteServices.PutCliente(cliente.IdCliente, cliente);
+        }
+
+        NavigationManager.NavigateTo("/Clientes");
+    }
+
+    async Task DeleteClient()
+    {
+        await ClienteServices.DeleteCliente(cliente.IdCliente);
+
+        NavigationManager.NavigateTo("/Clientes");
+
+    }
+
+    public partial class ClienteAux
+    {
+        public byte IdCliente { get; set; }
+
+        public string NombreCliente { get; set; } = null!;
+
+        public string DirCliente { get; set; } = null!;
+
+        public string CorreoCliente { get; set; } = null!;
+
+        public string TelefonoCliente { get; set; } = null!;
+
+    }
+}
